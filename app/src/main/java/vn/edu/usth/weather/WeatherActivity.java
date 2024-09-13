@@ -3,11 +3,11 @@ package vn.edu.usth.weather;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -17,10 +17,26 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         Log.i("WeatherActivity", "onCreate called");
 
-        ForecastFragment forecastFragment = new ForecastFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, forecastFragment)
-                .commit();
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        WeatherPagerAdapter adapter = new WeatherPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+    }
+
+    private static class WeatherPagerAdapter extends FragmentPagerAdapter {
+
+        public WeatherPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new WeatherAndForecastFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
     }
 
     @Override
