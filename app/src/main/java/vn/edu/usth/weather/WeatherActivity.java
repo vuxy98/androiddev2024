@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -20,6 +22,13 @@ public class WeatherActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.viewPager);
         WeatherPagerAdapter adapter = new WeatherPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.getTabAt(0).setText("Ha Noi");
+        tabLayout.getTabAt(1).setText("Paris");
+        tabLayout.getTabAt(2).setText("Tokyo");
     }
 
     private static class WeatherPagerAdapter extends FragmentPagerAdapter {
@@ -30,12 +39,32 @@ public class WeatherActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new WeatherAndForecastFragment();
+            switch (position) {
+                case 0:
+                    return WeatherAndForecastFragment.newInstance("Ha Noi");
+                case 1:
+                    return WeatherAndForecastFragment.newInstance("Paris");
+                case 2:
+                    return WeatherAndForecastFragment.newInstance("Tokyo");
+                default:
+                    return null;
+            }
         }
+
 
         @Override
         public int getCount() {
             return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0: return "Ha Noi";
+                case 1: return "Paris";
+                case 2: return "Tokyo";
+                default: return null;
+            }
         }
     }
 
