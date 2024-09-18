@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Thời tiết USTH</string>
+    <string name="temperature_placeholder">29°C</string>
+    <string name="city_name_placeholder">Hà Nội</string>
+    <string name="forecast_title">Dự báo thời tiết</string>
+    <string name="tab_ha_noi">Hà Nội</string>
+    <string name="tab_paris">Paris</string>
+    <string name="tab_tokyo">Tokyo</string>
+</resources>
