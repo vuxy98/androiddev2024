@@ -1,9 +1,15 @@
 package vn.edu.usth.weather;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -11,12 +17,23 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import androidx.appcompat.widget.Toolbar;
+
 public class WeatherActivity extends AppCompatActivity {
+
+    private static final int REQUEST_WRITE_STORAGE = 112;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         Log.i("WeatherActivity", "onCreate called");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
@@ -29,6 +46,58 @@ public class WeatherActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setText("Ha Noi");
         tabLayout.getTabAt(1).setText("Paris");
         tabLayout.getTabAt(2).setText("Tokyo");
+
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        } else {
+            extractMp3ToExternalStorage();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_WRITE_STORAGE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            extractMp3ToExternalStorage();
+        }
+    }
+
+    private void extractMp3ToExternalStorage() {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            inputStream = getResources().openRawResource(R.raw.weather_melody);
+            File externalDir = Environment.getExternalStorageDirectory();
+            File mp3File = new File(externalDir, "weather_melody.mp3");
+            outputStream = new FileOutputStream(mp3File);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            Log.i("WeatherActivity", "MP3 file extracted to " + mp3File.getAbsolutePath());
+
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(mp3File.getAbsolutePath());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("WeatherActivity", "Error extracting MP3 file", e);
+        } finally {
+            try {
+                if (inputStream != null) inputStream.close();
+                if (outputStream != null) outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static class WeatherPagerAdapter extends FragmentPagerAdapter {
@@ -51,7 +120,6 @@ public class WeatherActivity extends AppCompatActivity {
             }
         }
 
-
         @Override
         public int getCount() {
             return 3;
@@ -60,10 +128,14 @@ public class WeatherActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0: return "Ha Noi";
-                case 1: return "Paris";
-                case 2: return "Tokyo";
-                default: return null;
+                case 0:
+                    return "Ha Noi";
+                case 1:
+                    return "Paris";
+                case 2:
+                    return "Tokyo";
+                default:
+                    return null;
             }
         }
     }
