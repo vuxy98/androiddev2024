@@ -1,13 +1,18 @@
 package vn.edu.usth.weather;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -22,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import androidx.appcompat.widget.Toolbar;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -32,8 +36,10 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         Log.i("WeatherActivity", "onCreate called");
 
         ViewPager viewPager = findViewById(R.id.viewPager);
@@ -56,6 +62,26 @@ public class WeatherActivity extends AppCompatActivity {
         } else {
             extractMp3ToExternalStorage();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_refresh) {
+            Toast.makeText(this, "Refreshing...", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (itemId == R.id.action_settings) {
+            Intent intent = new Intent(this, PrefActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
