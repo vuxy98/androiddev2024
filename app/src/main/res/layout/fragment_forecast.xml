@@ -8,22 +8,11 @@
     android:gravity="center_horizontal"
     android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/forecast_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/forecast_title"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:paddingBottom="16dp" />
+    <ImageView
+        android:id="@+id/usth_logo"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:contentDescription="USTH Logo" />
 
-    <LinearLayout
-        android:id="@+id/forecast_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="#500000FF">
-    </LinearLayout>
 
 </LinearLayout>

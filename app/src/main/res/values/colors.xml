@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="blue_dark">#500000FF</color> <!-- Extracted blue color from forecast fragment background -->
-    <color name="green_light">#A2FF99</color> <!-- Extracted green color from weather fragment background -->
-    <color name="holo_blue_dark">@android:color/holo_blue_dark</color> <!-- Referencing the holo blue dark color -->
+    <color name="blue_dark">#500000FF</color>
+    <color name="green_light">#A2FF99</color>
+    <color name="holo_blue_dark">@android:color/holo_blue_dark</color>
 </resources>

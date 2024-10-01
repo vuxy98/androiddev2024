@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -74,7 +75,7 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_refresh) {
-            Toast.makeText(this, "Refreshing...", Toast.LENGTH_SHORT).show();
+            new RefreshTask().execute();
             return true;
         } else if (itemId == R.id.action_settings) {
             Intent intent = new Intent(this, PrefActivity.class);
@@ -82,6 +83,33 @@ public class WeatherActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // AsyncTask to simulate a network request
+    private class RefreshTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(WeatherActivity.this, "Refreshing...", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            // Show Toast when refresh is complete
+            Toast.makeText(WeatherActivity.this, "Refresh complete", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
