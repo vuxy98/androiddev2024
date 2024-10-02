@@ -88,9 +88,8 @@ public class ForecastFragment extends Fragment {
         usthLogoImageView = new ImageView(getActivity());
         LinearLayout.LayoutParams logoParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400);
         usthLogoImageView.setLayoutParams(logoParams);
-        usthLogoImageView.setPadding(0, 50, 0, 0);
         parentLayout.addView(usthLogoImageView);
-        new DownloadImageTask().execute("http://ict.usth.edu.vn/wp-content/");
+        new DownloadImageTask().execute("https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather02-512.png");
 
         return parentLayout;
     }
